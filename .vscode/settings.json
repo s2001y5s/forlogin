@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "study",
+            "dialect": "MySQL",
+            "name": "forstudy",
+            "password": "dus123",
+            "port": 3306,
+            "server": "localhost",
+            "username": "ChaeRyu"
+        }
+    ]
+}
