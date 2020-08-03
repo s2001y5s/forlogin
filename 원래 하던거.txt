@@ -1,0 +1,186 @@
+
+/*var express = require('express');
+var parseurl =  require('parseurl');
+var session = require('express-session');
+
+var app = express();
+
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUnitialized:true
+}));
+
+app.use(function (request, response, next) {
+    if(!request.session.views) {
+        request.session.views = {};
+    }
+
+    var pathname = parseurl(request).pathname;
+
+    request.session.views[pathname] = (request.session.views[pathname] || 0) + 1;
+    next();
+});
+
+app.get('/foo', function(request, response, next) {
+    response.send('you viewed this page' + request.session.views['/foo'] + 'times')
+});
+
+app.get('/bar', function(request, response, next) {
+    response.send('you viewed this page' + request.session.views['/bar'] + 'times')
+});
+
+app.listen(3000, function() {
+    console.log('Example app listening on port 3000!');
+});
+
+const express = require('express');
+const app = express();
+const port = 3000;
+
+var url = require('url');
+var qs = require('querystring');
+var cookie = require('cookie');
+var mysql = require('mysql');
+var bodyParser = require('body-parser');
+var db = mysql.createConnection({
+  host:'localhost',
+  user:'root',
+  password:'dus123',
+  database:'study'
+});
+db.connect();
+
+app.use(bodyParser.urlencoded({exteded:false}));
+
+function isHeLogined(request, response) {
+  var cookies = {};
+  if(request.headers.cookie) {
+    return '<a href="/logout_process">logout</a>';
+  }
+  else {
+    return '<a href="/login">login</a>';
+  }
+}
+
+app.get('/', function(request, response) {
+  var _url = request.url;
+  var queryData = url.parse(_url, true).query;
+  var pathname = url.parse(_url, true).pathname;
+  var resultdata = isHeLogined(request, response);
+
+  db.query(`SELECT * FROM topic`, function(error, topics) {
+    response.send(`
+    <!doctype html>
+    <html>
+    <head>
+      <title>LOGIN</title>
+      <meta charset="utf-8">
+    </head>
+    <body>
+      ${resultdata}
+    </body>
+    </html>
+    `)});
+});
+
+app.get('/login', function(request, response) {
+  db.query(`SELECT * FROM topic`, function(error, topics) {
+    response.send(`
+    <!doctype html>
+    <html>
+    <head>
+      <title>LOGIN</title>
+      <meta charset="utf-8">
+    </head>
+    <body>
+      <form action="/login_process" method="post">
+      <input type = "text" name ="id" placeholder="id" ><p></p>
+      <input type = "text" name ="password" placeholder="password" >
+      <p></p><input type = "submit" value="login">
+      <a href="/register">register</a>
+      </form>
+    </body>
+    </html>
+    `);
+  });
+});
+
+app.post('/login_process', function(request, response) {
+
+  var post = request.body;
+  db.query(`SELECT * FROM login`, function(error, login) {
+    for(var i = 0; i < login.length ; i++) {
+      if(post.id === login[i].id && post.password === login[i].password) {
+        response.writeHead(302, 
+        {
+          'Set-Cookie': [
+            `id=${post.id}`,
+            `password=${post.password}`
+          ],
+        Location:`/`
+      });
+      response.end();
+      return;
+      }
+    }
+    response.writeHead(302, {Location:`/login`});
+    response.end();
+  });
+});
+
+app.get('/logout_process', function(request, response) {
+    var post = request.body;
+    response.writeHead(302, 
+    {
+      'Set-Cookie': [
+        `id=; Max-Age=0`,
+        `password=; Max-Age=0`
+      ],
+    Location:`/`
+  });
+  response.end();
+});
+
+app.get('/register', function(request, response) {
+  response.send(`
+  <!doctype html>
+  <html>
+  <head>
+    <title>LOGIN</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <form action="/register_process" method="post">
+    <input type = "text" name ="id" placeholder="ID  to register" ><p></p>
+    <input type = "text" name ="password" placeholder="password" >
+    <p></p><input type = "submit">
+    <a href="/register">register</a>
+  </body>
+  </html>
+  `);
+});
+
+app.post('/register_process', function(request, response) {
+  
+    var post = request.body;
+    db.query(`SELECT * FROM login`, function(error, login) {
+      for(var i = 0; i < login.length ; i++) {
+        if(post.id === login[i].id) {
+          response.writeHead(302, {Location:`/register`});
+          response.end();
+        }
+      }
+      db.query(`INSERT INTO login (id, password, created) 
+      VALUES(?, ?, NOW())`, [post.id, post.password], function(error1,reuslt) {
+        if(error1) { throw error1;}
+        response.writeHead(302, {Location:`/`});
+        response.end();
+      });
+    });
+});
+
+app.listen(3000, function() {
+  console.log('Example');
+});
+*/
